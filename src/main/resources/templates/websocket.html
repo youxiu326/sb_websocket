@@ -1,0 +1,74 @@
+[#assign basePath = request.contextPath]
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="author" content="ThemeBucket">
+    <title>测试webSocket</title>
+</head>
+
+<body>
+
+Welcome Websocket<br/>
+<input id="text" type="text" /><button onclick="send()">Send</button>    <button onclick="closeWebSocket()">Close</button>
+<div id="message">
+</div>
+
+</body>
+
+<script>
+
+    var socket;
+    if(typeof(WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    }else{
+        console.log("您的浏览器支持WebSocket")
+    }
+
+    // 初始化一个 WebSocket 对象
+    var socket = new WebSocket("ws://localhost:8888/girl");
+
+    // 建立 web socket 连接成功触发事件
+    socket.onopen = function () {
+        // 使用 send() 方法发送数据
+        socket.send("发送数据");
+        console.log("数据发送中...");
+    };
+
+    // 接收服务端数据时触发事件
+    socket.onmessage = function (evt) {
+        var received_msg = evt.data;
+        setMessageInnerHTML(received_msg);
+        console.log("数据已接收...");
+    };
+
+    // 断开 web socket 连接成功触发事件
+    socket.onclose = function () {
+        console.log("连接已关闭...");
+    };
+    //发生了错误事件
+    socket.onerror = function() {
+        console.log("Socket发生了错误");
+    }
+
+
+    /* 自定义方法 */
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML){
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+
+    //关闭连接
+    function closeWebSocket(){
+        socket.close();
+    }
+
+    //发送消息
+    function send(){
+        var message = document.getElementById('text').value;
+        socket.send(message);
+    }
+</script>
+
+</html>
