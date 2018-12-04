@@ -61,7 +61,12 @@ public class WebSocketServer {
         subOnlineCount();  
         System.err.println("用户退出！当前人数为："+getOnlineCount());
 	}
-	
+
+    /**
+     * 收到消息
+     * @param message
+     * @param session
+     */
 	@OnMessage
     public void onMessage(String message, Session session) {
     	System.err.println("客户端发送消息："+message);
