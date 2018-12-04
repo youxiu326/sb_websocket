@@ -40,7 +40,7 @@ Welcome Websocket<br/>
     socket.onmessage = function (evt) {
         var received_msg = evt.data;
         setMessageInnerHTML(received_msg);
-        console.log("数据已接收...");
+        console.log("数据已接收..."+received_msg);
     };
 
     // 断开 web socket 连接成功触发事件
