@@ -1,0 +1,14 @@
+1.安装crond服务
+yum -y install crontabs
+2.添加检测任务
+crontab -e
+添加如下内容
+*/1 * * * * /servers/webserver/foxbistore/bin/checkService.sh
+3.启动crond服务
+service crond start
+
+
+
+参考文档:
+crontab 定时任务不执行原因
+http://blog.csdn.net/u011734144/article/details/54576469
