@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>404</title>
+<style type="text/css">
+html{ width:100%; overFlow-x: hidden; OVERFLOW: scroll; }
+body{ margin:0px; padding:0px; background:#fff;}
+ul{ list-style:none; margin:0px; padding:0px;}
+.fl{ float:left;}
+.fr{ float:right;}
+.cl{ clear:both;}
+*{ font-family:"微软雅黑"; font-size:12px; color:#5f5f5f;}
+a{font-family:"微软雅黑"; font-size:12px; color:#5f5f5f; text-decoration:none;}
+a:hover{ color:#f00; border:0px;}
+img{ border:0px;}
+.st{ width:728px; height320px;text-align:center; margin: 0 auto;  margin-top: 70px;}
+.fh{ width: 728px; height: 89px; text-align: center; margin: 0 auto; margin-top: 15px;}
+</style>
+</head>
+<body style="background-color:#f1f4f8;">
+
+<h3>404页面</h3>
+
+<div class="st"><a href="/"><img src="/images/404_03.png"></a></div> 
+<div class="fh"><b id="num">15</b>秒后跳转到首页</div>
+
+<!--脚本开始--> 
+<script> 
+function countDown(secs){ 
+	if(--secs>0) {
+		document.getElementById("num").innerText=secs;
+		setTimeout(function(){countDown(secs)},1000);  
+	}
+	else{
+		window.parent.location.href='/';
+	} 
+}
+countDown(15); 
+</script> 
+<!--脚本结束--> 
+
+</body>
+</html>

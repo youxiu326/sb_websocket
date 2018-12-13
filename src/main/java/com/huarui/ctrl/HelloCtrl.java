@@ -13,4 +13,10 @@ public class HelloCtrl {
         return "websocket";
     }
 
+    @GetMapping("/byZero")
+    public String byZero(){
+        int a =5/0;
+        return "websocket";
+    }
+
 } 
