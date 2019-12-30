@@ -1,4 +1,4 @@
-package com.huarui.ctrl;
+package com.youxiu326.ctrl;
 
 
 import org.springframework.stereotype.Controller;

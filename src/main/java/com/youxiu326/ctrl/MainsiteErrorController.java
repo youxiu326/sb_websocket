@@ -1,4 +1,4 @@
-package com.huarui.ctrl;
+package com.youxiu326.ctrl;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;

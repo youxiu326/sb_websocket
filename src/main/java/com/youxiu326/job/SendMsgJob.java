@@ -1,6 +1,6 @@
-package com.huarui.job;
+package com.youxiu326.job;
 
-import com.huarui.msg.WebSocketServer;
+import com.youxiu326.msg.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -30,7 +30,7 @@ public class SendMsgJob {
     public void StoreBasketCheck() {
         try {
             log.info("服务器端发送消息->{}",sdf.format(new Date()));
-            WebSocketServer.sendInfo(sdf.format(new Date()));
+            WebSocketServer.sendInfo(sdf.format(new Date()),"first");
         } catch (IOException e) {
             log.error(e.getMessage());
         }
