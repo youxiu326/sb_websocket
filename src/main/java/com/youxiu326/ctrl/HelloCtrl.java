@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HelloCtrl {
 
+    @GetMapping("/index")
+    public String layout(){
+        return "index";
+    }
 
     @GetMapping("/vue")
     public String vue(){
