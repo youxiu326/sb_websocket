@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="/css/element.css">
+</head>
+<body>
+
+
+    <div id="app">
+
+        {{ message }}
+
+        <el-button @click="visible = true">Button</el-button>
+        <el-dialog :visible.sync="visible" title="Hello world">
+            <p>Try Element</p>
+        </el-dialog>
+    </div>
+
+
+</body>
+
+<script src="/js/vue.js"></script>
+<script src="/js/element.js"></script>
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            visible: false
+        }
+    })
+
+</script>
+</html>

@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HelloCtrl {
 
 
+    @GetMapping("/vue")
+    public String vue(){
+        return "vue";
+    }
+
     @GetMapping("/")
     public String index(){
         return "websocket";
