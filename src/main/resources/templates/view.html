@@ -55,8 +55,17 @@
 
             </el-aside>
             <el-container>
-                <el-main>Main</el-main>
-
+                <el-main style="overflow: hidden;padding: 0">
+                    <el-tabs v-model="activeTab" type="card"  @tab-remove="removeMenuTab"  >
+                        <el-tab-pane v-for="(item, index) in menuTabs"
+                                     :key="item.name"
+                                     :label="item.label"
+                                     :name="item.name"
+                                     :closable=item.closable >
+                            <iframe  @load="iframeOnload" :id="item.name" :src="item.src" width="100%"  :height="screenHeight"  marginwidth="0" marginheight="0" frameborder="0" scrolling="auto"></iframe>
+                        </el-tab-pane>
+                    </el-tabs>                    
+                </el-main>
             </el-container>
         </el-container>
     </el-container>
@@ -66,11 +75,13 @@
 <script src="/js/vue.js"></script>
 <script src="/js/element.js"></script>
 <script>
-
+    var loseHeight= 61;
     var app = new Vue({
         el: '#app',
         data: {
             activeIndex:'1',
+            activeTab:'HOME',
+            screenHeight: document.documentElement.clientHeight-loseHeight,
             topMenus:[
                 {
                     "id": "1",
@@ -81,14 +92,14 @@
                         "id": "101",
                         "name": "子项101",
                         "type": "MENU",
-                        "url": "/productreport/productReportPage3",
+                        "url": "https://www.tmall.com/",
                         "parentId": "1",
                         "childs": []
                     },{
                         "id": "102",
                         "name": "子项102",
                         "type": "MENU",
-                        "url": "/productreport/productReportPage3",
+                        "url": "https://www.taobao.com/",
                         "parentId": "1",
                         "childs": []
                     }]
@@ -102,15 +113,15 @@
                         "id": "201",
                         "name": "子项201",
                         "type": "MENU",
-                        "url": "/productreport/productReportPage3",
-                        "parentId": "1",
+                        "url": "https://www.jd.com/",
+                        "parentId": "2",
                         "childs": []
                     },{
                         "id": "202",
                         "name": "子项202",
                         "type": "MENU",
-                        "url": "/productreport/productReportPage3",
-                        "parentId": "1",
+                        "url": "https://www.alipay.com/",
+                        "parentId": "2",
                         "childs": []
                     }]
                 },
@@ -122,10 +133,16 @@
                     "childs": []
                 }
             ],
-            menus:[]
-
+            menus:[],
+            menuTabs:[{
+                label: '首页',
+                name:'HOME',
+                closable:false,
+                src: '/vue'
+            }]
         },
         methods: {
+            // 初始化菜单数据
             created: function () {
                 this.$http.get('/menus/data').then(function(response){
                         if(response.body.data){
@@ -139,16 +156,78 @@
                     function(response) {}
                 );
             },
-            menuHandleSelect:function(key, keyPath) {
-                console.log(key);
-                console.log(keyPath);
-                console.log(key, keyPath);
+            mounted:function() {
+                window.onresize = function(){
+                    this.screenHeight = document.documentElement.clientHeight-loseHeight;
+                }
             },
+            menuHandleSelect:function(key, keyPath) {
+                // key = {0_0};         当前路径的key
+                // keyPath = [0,0_0]    这个路径下的的key集合
+
+                var menu = this.menus[keyPath[0]];
+                if(menu.childs&&menu.childs.length>0){
+                    var k = key.split("_")[1];
+                    menu = menu.childs[k];
+                }
+                if(menu){
+                    this.addMenus({
+                        label:menu.name,
+                        name:menu.id,
+                        closable:true,
+                        src: menu.url
+                    });
+                }
+            },
+            // 头部菜单选中事件
             topMenuHandleSelect:function (key,keyPath) {
                 for(var i=0;i<this.topMenus.length;i++){
                     if(this.topMenus[i].id==key && this.topMenus[i].childs && this.topMenus[i].childs!=null &&this.topMenus[i].childs.length>0){
                         this.menus = this.topMenus[i].childs;
                         break;
+                    }
+                }
+            },
+            addMenus:function(menu){
+                var has =false;
+                for(var i=0;i<app.menuTabs.length;i++){
+                    // 如果已经存在相同名称的tab页,执行替换
+                    if(app.menuTabs[i].name == menu.name){
+                        app.activeTab = app.menuTabs[i].name;
+                        document.getElementById(app.activeTab).src=app.menuTabs[i].src;
+                        has=true;
+                        return false;
+                    }
+                }
+                // 否则直接添加一个tab页并设置为选中
+                if(!has){
+                    app.menuTabs.push(menu);
+                    app.activeTab = menu.name;
+                }
+            },
+            // iframe加载事件
+            iframeOnload:function(e){
+                // 如果子页面跳转到登陆url 说明登陆已失效 刷新当前界面
+                var url = e.currentTarget.contentWindow.document.URL;
+                if(url.indexOf("/login")>-1){
+                    window.location.reload();
+                }
+            },
+            // 移除tab页事件
+            removeMenuTab:function (name) {
+                for(var i=0;i<this.menuTabs.length;i++){
+                    if(this.menuTabs[i].name == name){
+                        // 如果当前移除的是选中tab
+                        if(this.activeTab==this.menuTabs[i].name){
+                            if(i == this.menuTabs.length-1){
+                                this.activeTab = this.menuTabs[i-1].name;
+                            }else{
+                                this.activeTab = this.menuTabs[i+1].name;
+                            }
+                        }
+                        // 移除tab页
+                        this.menuTabs.splice(i,1);
+                        return false;
                     }
                 }
             }
